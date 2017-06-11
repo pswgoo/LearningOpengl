@@ -11,7 +11,12 @@ find_library(glew NAMES glew32s.lib PATHS lib)
 #	set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} /NODEFAULTLIB:libcmt.lib)
 #endif()
 	
-include_directories(include)
+include_directories(include common external ./)
+
+add_subdirectory(common)
+add_subdirectory(external)
 
 add_subdirectory(hello_window)
 add_subdirectory(hello_triangle)
+
+file(COPY res DESTINATION ${CMAKE_BINARY_DIR})

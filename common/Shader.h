@@ -15,6 +15,7 @@ public:
 
 	void SetInt(const std::string& name, int val);
 	void SetFloat(const std::string& name, float val);
+	void SetMatrix4f(const std::string& name, const float* ptr);
 
 	int id() { return id_; }
 

@@ -5,6 +5,9 @@
 
 #include "Shader.h"
 #include "stb/stb_image.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -70,13 +73,14 @@ layout (location=0) in vec3 aPos;
 layout (location=1) in vec3 aColor;
 layout (location=2) in vec2 aTexCoord;
 
+uniform mat4 transform;
 uniform float hOffset;
 
 out vec4 outColor;
 out vec2 outTexCoord;
 
 void main() {
-	gl_Position = vec4(aPos.x + hOffset, aPos.y, aPos.z, 1.0);
+	gl_Position = transform * vec4(aPos.x, aPos.y, aPos.z, 1.0);
 	outColor = vec4(aColor, 1.0f);
 	outTexCoord = aTexCoord;
 }
@@ -88,10 +92,11 @@ out vec4 FragColor;
 in vec4 outColor;
 in vec2 outTexCoord;
 
-uniform sampler2D ourTexture;
+uniform sampler2D texture0;
+uniform sampler2D texture1;
 
 void main() {
-	FragColor = texture(ourTexture, outTexCoord);
+	FragColor = mix(texture(texture0, outTexCoord), texture(texture1, outTexCoord), .2);
 }
 
 )DLIM";
@@ -129,6 +134,7 @@ int main() {
 	// Init texture 2D
 	GLuint texture;
 	glGenTextures(1, &texture);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -138,6 +144,24 @@ int main() {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture_data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	stbi_image_free(texture_data);
+
+	img_width = img_height = 0;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char *texture_data1 = stbi_load("../res/awesomeface.png", &img_width, &img_height, &img_channel, 0);
+	std::cout << "iMG Width: " << img_width << ", iMG Height:" << img_height << std::endl;
+
+	GLuint texture1;
+	glGenTextures(1, &texture1);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data1);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(texture_data1);
 
 	Shader shader;
 	shader.InitProgram(kVertexAttribShader, kFragmentAttribShader);
@@ -180,13 +204,27 @@ int main() {
 
 		shader.Use();
 
-		shader.SetFloat("hOffset", greenValue);
+		shader.SetInt("texture0", 0);
+		shader.SetInt("texture1", 1);
+		glm::mat4 translate;
+		translate = glm::translate(translate, glm::vec3(0.5, 0.5, 0));
+		glm::mat4 trans;
+		trans = glm::rotate(trans, glm::radians(360.f * sin(time / 5)), glm::vec3(0, 0, 1));
 
-		//glUniform4f(greenLocation, .0f, greenValue, .0f, .0f);
+		shader.SetMatrix4f("transform", glm::value_ptr(trans * translate));
+
+		shader.SetFloat("hOffset", greenValue);
 
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glm::mat4 scale;
+		scale = glm::scale(scale, glm::vec3(0.5f, 0.5f, 0.5f));
+		scale = glm::translate(scale, glm::vec3(-0.5f, -0.5f, 0.f));
+
+		shader.SetMatrix4f("transform", &scale[0][0]);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
 	}

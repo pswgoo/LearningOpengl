@@ -18,5 +18,6 @@ add_subdirectory(external)
 
 add_subdirectory(hello_window)
 add_subdirectory(hello_triangle)
+add_subdirectory(hello_cube)
 
 file(COPY res DESTINATION ${CMAKE_BINARY_DIR})

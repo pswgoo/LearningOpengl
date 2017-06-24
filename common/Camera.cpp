@@ -6,10 +6,10 @@ Camera::Camera() :
 	pos_(0, 0, 0),
 	up_(0, 1, 0),
 	world_up_(0, 1, 0),
-	move_speed_(25.5f),
+	move_speed_(20.f),
 	pitch_(0.f),
 	yaw_(-90.f),
-	mouse_sensitivity_(0.01f),
+	mouse_sensitivity_(0.1f),
 	zoom_(45.f) {
 
 	UpdateCameraVector();
@@ -57,7 +57,7 @@ glm::mat4 Camera::GetViewMatrix() {
 void Camera::UpdateCameraVector() {
 	float radian_pitch = glm::radians(pitch_);
 	float radian_yaw = glm::radians(yaw_);
-	front_.y = std::sin(glm::radians(radian_pitch));
+	front_.y = std::sin(radian_pitch);
 	front_.x = std::cos(radian_pitch) * std::cos(radian_yaw);
 	front_.z = std::cos(radian_pitch) * std::sin(radian_yaw);
 	front_ = glm::normalize(front_);

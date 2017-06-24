@@ -4,6 +4,8 @@
 #include <GLFW/glfw3.h>
 
 #include "Shader.h"
+#include "Camera.h"
+
 #include "stb/stb_image.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -95,15 +97,12 @@ void main() {
 
 )DLIM";
 
-glm::vec3 cameraPos(0, 0, 10);
-glm::vec3 cameraDir(0, 0, -1);
-glm::vec3 cameraUp(0, 1, 0);
+Camera camera(glm::vec3(0, 0, 10), 0.f, -90.f);
 
 float timeDelta = 0;
 
 double lastXpos = 0, lastYpos = 0;
 double deltaXpos = 0, deltaYpos = 0;
-float picth = 0, yaw = -90;
 
 void mouseCallBack(GLFWwindow* window, double xPos, double yPos) {
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
@@ -112,27 +111,12 @@ void mouseCallBack(GLFWwindow* window, double xPos, double yPos) {
 		lastXpos = xPos;
 		lastYpos = yPos;
 
-		const float sensitivity = 0.1;
-		picth += deltaYpos * sensitivity;
-		yaw += deltaXpos * sensitivity;
-
-		if (picth > 89)
-			picth = 89;
-		if (picth < -89)
-			picth = -89;
-
-		glm::vec3 dir;
-		cameraDir.y = sin(glm::radians(picth));
-		cameraDir.x = cos(glm::radians(picth)) * cos(glm::radians(yaw));
-		cameraDir.z = cos(glm::radians(picth)) * sin(glm::radians(yaw));
-
-		dir.x += deltaXpos * sensitivity;
-		dir.y += deltaYpos * sensitivity;
+		camera.DirectionMove(deltaXpos, deltaYpos);
 
 		//cameraPos += dir;
-		std::cout << "Camera: " << cameraPos.x << " " << cameraPos.y << " " << cameraPos.z << std::endl;
+		/*std::cout << "Camera: " << cameraPos.x << " " << cameraPos.y << " " << cameraPos.z << std::endl;
 		std::cout << "dir: " << dir.x << " " << dir.y << " " << dir.z << std::endl;
-		std::cout << "picth: " << picth << ", yaw: " << yaw << std::endl;
+		std::cout << "picth: " << picth << ", yaw: " << yaw << std::endl;*/
 	}
 	else {
 		deltaXpos = 0;
@@ -140,18 +124,22 @@ void mouseCallBack(GLFWwindow* window, double xPos, double yPos) {
 	}
 }
 
+void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+	camera.Zoom(yoffset);
+}
+
 void processInput(GLFWwindow* window) {
 	const float speed = 20;
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraPos += cameraDir * timeDelta * speed;
+		camera.Move(CameraDirection::FORWARD, timeDelta);
 	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraPos -= cameraDir * timeDelta * speed;
+		camera.Move(CameraDirection::BACKWARD, timeDelta);
 	else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraPos -= glm::normalize(glm::cross(cameraDir, cameraUp)) * timeDelta * speed;
+		camera.Move(CameraDirection::LEFT, timeDelta);
 	else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cameraPos += glm::normalize(glm::cross(cameraDir, cameraUp)) * timeDelta * speed;
+		camera.Move(CameraDirection::RIGHT, timeDelta);
 	else if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		cameraPos = glm::vec3(0, 0, 10);
+		camera = Camera(glm::vec3(0, 0, 10), 0.f, -90.f);
 }
 
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
@@ -182,6 +170,7 @@ int main() {
 
 	glfwSetCursorPosCallback(window, mouseCallBack);
 	glfwSetMouseButtonCallback(window, mouseButtonCallback);
+	glfwSetScrollCallback(window, scrollCallback);
 
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
@@ -278,9 +267,9 @@ int main() {
 
 		glm::mat4 view;
 
-		view = glm::lookAt(cameraPos, cameraPos + cameraDir, cameraUp);
+		view = camera.GetViewMatrix();
 
-		glm::mat4 projection = glm::perspective(glm::radians(45.f), float(width) / float(height), 0.1f, 100.f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.zoom_), float(width) / float(height), 0.1f, 100.f);
 
 		shader.SetMatrix4f("view", glm::value_ptr(view));
 		shader.SetMatrix4f("projection", glm::value_ptr(projection));

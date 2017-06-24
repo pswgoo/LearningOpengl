@@ -1,5 +1,7 @@
 #include "Shader.h"
 
+#include <GL/glew.h>
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -71,6 +73,10 @@ void Shader::SetInt(const std::string& name, int val) {
 
 void Shader::SetFloat(const std::string& name, float val) {
 	glUniform1f(glGetUniformLocation(id_, name.data()), val);
+}
+
+void Shader::SetVec3f(const std::string& name, const float* ptr) {
+	glUniform3fv(glGetUniformLocation(id_, name.c_str()), 1, ptr);
 }
 
 void Shader::SetMatrix4f(const std::string& name, const float* ptr) {

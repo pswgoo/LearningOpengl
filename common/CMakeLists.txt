@@ -1,4 +1,6 @@
 set(SRC
+	Camera.cpp
+	Camera.h
 	Shader.cpp
 	Shader.h
 )

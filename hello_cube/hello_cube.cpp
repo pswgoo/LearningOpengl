@@ -97,7 +97,7 @@ void main() {
 
 )DLIM";
 
-Camera camera(glm::vec3(0, 0, 10), 0.f, -90.f);
+Camera camera(glm::vec3(0, 0, 10));
 
 float timeDelta = 0;
 

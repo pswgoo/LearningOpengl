@@ -24,7 +24,7 @@ public:
 	float zoom_;
 
 	Camera();
-	Camera(glm::vec3 pos, float pitch, float yaw);
+	Camera(glm::vec3 pos, float pitch = 0.f, float yaw = -90.f);
 
 	void Move(CameraDirection dir, float delta_time);
 

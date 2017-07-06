@@ -160,10 +160,25 @@ void main() {
 )DLIM";
 //
 const char* objFragShader = R"DLIM(#version 330 core
+
+struct Material {
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	float shininess;
+};
+
+struct Light {
+	vec3 position;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+};
+
 out vec4 FragColor;
 
-uniform vec3 lightColor;
-uniform vec3 lightPos;
+uniform Light light;
+uniform Material material;
 uniform vec3 objColor;
 uniform vec3 eyePos;
 
@@ -171,20 +186,20 @@ in vec3 fragPos;
 in vec3 fragNorm;
 
 void main() {
-	float ambient_strength = 0.1;
-	float diffuse_strength = 0.0;
+	float ambient_strength = 1;
+	float diffuse_strength = 1;
 	float specular_strength = 1;
 
-	vec3 ambient = ambient_strength * lightColor;
+	vec3 ambient = ambient_strength * light.ambient;
 
-	vec3 lightDir = normalize(lightPos - fragPos);
+	vec3 lightDir = normalize(light.position - fragPos);
 	vec3 norm = normalize(fragNorm);
-	vec3 diffuse = diffuse_strength * lightColor * max(dot(norm, lightDir), 0);
+	vec3 diffuse = diffuse_strength * light.diffuse * max(dot(norm, lightDir), 0) * material.diffuse;
 
 	vec3 reflectDir = normalize(reflect(-lightDir, norm));
 	vec3 viewDir = normalize(eyePos - fragPos);
 	float spec = dot(reflectDir, viewDir);
-	vec3 specular = specular_strength * pow(max(spec, 0), 16) * lightColor;
+	vec3 specular = specular_strength * pow(max(spec, 0), material.shininess) * light.specular * material.specular;
 
 	vec3 result = (ambient + diffuse + specular) * objColor;
 	FragColor = vec4(result, 1);
@@ -250,8 +265,7 @@ int main() {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glm::vec3 lightPos(1.2f, 1.0f, -2.0f);
-	glm::vec3 lightColor(1.f);
+	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 	float lastTime = (float)glfwGetTime();
 	while (!glfwWindowShouldClose(window)) {
@@ -271,13 +285,27 @@ int main() {
 		
 		objShader.Use();
 
+		glm::vec3 lightColor;
+		lightColor.x = sin(glfwGetTime() * 2.0f);
+		lightColor.y = sin(glfwGetTime() * 0.7f);
+		lightColor.z = sin(glfwGetTime() * 1.3f);
+
+		glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); // decrease the influence
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+
 		objShader.SetMatrix4f("model", glm::value_ptr(model));
 		objShader.SetMatrix4f("view", glm::value_ptr(view));
 		objShader.SetMatrix4f("projection", glm::value_ptr(projection));
-		objShader.SetVec3f("lightPos", glm::value_ptr(lightPos));
-		objShader.SetVec3f("lightColor", glm::value_ptr(lightColor));
+		objShader.SetVec3f("light.position", glm::value_ptr(lightPos));
+		objShader.SetVec3f("light.ambient", glm::value_ptr(ambientColor));
+		objShader.SetVec3f("light.diffuse", glm::value_ptr(diffuseColor));
+		objShader.SetVec3f("light.specular", glm::value_ptr(glm::vec3(1.f, 1.f, 1.f)));
 		objShader.SetVec3f("objColor", glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
 		objShader.SetVec3f("eyePos", glm::value_ptr(camera.pos_));
+		objShader.SetVec3f("material.ambient", glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
+		objShader.SetVec3f("material.diffuse", glm::value_ptr(glm::vec3(1.f, 0.5f, 0.31f)));
+		objShader.SetVec3f("material.specular", glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
+		objShader.SetFloat("material.shininess", 32.f);
 
 		glBindVertexArray(cubeVao);
 		glDrawArrays(GL_TRIANGLES, 0, 36);

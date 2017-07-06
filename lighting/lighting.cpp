@@ -14,47 +14,48 @@
 #include <iostream>
 
 float vertices_buffer[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	// positions          // normals           // texture coords
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+	0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+	0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+	0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+	0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
 
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-	0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+	0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+	0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+	0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+	0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+	0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+	0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+	0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+	0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
 
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+	0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
 };
 
 Camera camera(glm::vec3(0, 0, 3));
@@ -143,6 +144,7 @@ const char* objVertexShader = R"DLIM(#version 330 core
 
 layout (location=0) in vec3 aPos;
 layout (location=1) in vec3 aNorm;
+layout (location=2) in vec2 aTex;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -150,10 +152,12 @@ uniform mat4 projection;
 
 out vec3 fragPos;
 out vec3 fragNorm;
+out vec2 texPos;
 
 void main() {
 	fragPos = vec3(model * vec4(aPos, 1));
 	fragNorm = mat3(transpose(inverse(model))) * aNorm;
+	texPos = aTex;
 	gl_Position = projection * view * vec4(fragPos, 1);
 }
 
@@ -162,9 +166,8 @@ void main() {
 const char* objFragShader = R"DLIM(#version 330 core
 
 struct Material {
-	vec3 ambient;
-	vec3 diffuse;
-	vec3 specular;
+	sampler2D diffuse;
+	sampler2D specular;
 	float shininess;
 };
 
@@ -184,22 +187,23 @@ uniform vec3 eyePos;
 
 in vec3 fragPos;
 in vec3 fragNorm;
+in vec2 texPos;
 
 void main() {
 	float ambient_strength = 1;
 	float diffuse_strength = 1;
 	float specular_strength = 1;
 
-	vec3 ambient = ambient_strength * light.ambient;
+	vec3 ambient = ambient_strength * light.ambient * vec3(texture(material.diffuse, texPos));
 
 	vec3 lightDir = normalize(light.position - fragPos);
 	vec3 norm = normalize(fragNorm);
-	vec3 diffuse = diffuse_strength * light.diffuse * max(dot(norm, lightDir), 0) * material.diffuse;
+	vec3 diffuse = diffuse_strength * light.diffuse * max(dot(norm, lightDir), 0) * vec3(texture(material.diffuse, texPos));
 
 	vec3 reflectDir = normalize(reflect(-lightDir, norm));
 	vec3 viewDir = normalize(eyePos - fragPos);
 	float spec = dot(reflectDir, viewDir);
-	vec3 specular = specular_strength * pow(max(spec, 0), material.shininess) * light.specular * material.specular;
+	vec3 specular = specular_strength * pow(max(spec, 0), material.shininess) * light.specular * vec3(texture(material.specular, texPos));
 
 	vec3 result = (ambient + diffuse + specular) * objColor;
 	FragColor = vec4(result, 1);
@@ -240,6 +244,43 @@ int main() {
 	glViewport(0, 0, width, height);
 	std::cout << "Width: " << width << ", Height:" << height << std::endl;
 
+	int img_width, img_height, img_channel;
+	//stbi_set_flip_vertically_on_load(true);
+	unsigned char *texture_data = stbi_load("../res/container2.png", &img_width, &img_height, &img_channel, 0);
+	std::cout << "iMG Width: " << img_width << ", iMG Height:" << img_height << std::endl;
+
+	int spec_img_width, spec_img_height, spec_img_channel;
+	unsigned char *texture_data_spec = stbi_load("../res/container2_specular.png", &spec_img_width, &spec_img_height, &spec_img_channel, 0);
+	std::cout << "iMG Width: " << spec_img_width << ", iMG Height:" << spec_img_height << std::endl;
+
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	GLint format = img_channel > 3 ? GL_RGBA : GL_RGB;
+	glTexImage2D(GL_TEXTURE_2D, 0, format, img_width, img_height, 0, format, GL_UNSIGNED_BYTE, texture_data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(texture_data);
+
+	GLuint texture_spec;
+	glGenTextures(1, &texture_spec);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture_spec);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	GLint spec_format = spec_img_channel > 3 ? GL_RGBA : GL_RGB;
+	glTexImage2D(GL_TEXTURE_2D, 0, spec_format, spec_img_width, spec_img_height, 0, spec_format, GL_UNSIGNED_BYTE, texture_data_spec);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(texture_data_spec);
+
 	Shader lampShader;
 	lampShader.InitProgram(lampVertexShader, lampFragmentShader);
 	Shader objShader;
@@ -253,16 +294,18 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_buffer), vertices_buffer, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3*sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));
 	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
 	GLuint lampVao;
 	glGenVertexArrays(1, &lampVao);
 	glBindVertexArray(lampVao);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
@@ -302,9 +345,11 @@ int main() {
 		objShader.SetVec3f("light.specular", glm::value_ptr(glm::vec3(1.f, 1.f, 1.f)));
 		objShader.SetVec3f("objColor", glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
 		objShader.SetVec3f("eyePos", glm::value_ptr(camera.pos_));
-		objShader.SetVec3f("material.ambient", glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
-		objShader.SetVec3f("material.diffuse", glm::value_ptr(glm::vec3(1.f, 0.5f, 0.31f)));
-		objShader.SetVec3f("material.specular", glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
+		//objShader.SetVec3f("material.ambient", glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
+		//objShader.SetVec3f("material.diffuse", glm::value_ptr(glm::vec3(1.f, 0.5f, 0.31f)));
+		//objShader.SetVec3f("material.specular", glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
+		objShader.SetInt("material.diffuse", 0);
+		objShader.SetInt("material.specular", 1);
 		objShader.SetFloat("material.shininess", 32.f);
 
 		glBindVertexArray(cubeVao);
